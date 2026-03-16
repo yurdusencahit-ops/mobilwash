@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobil Wash 2026 | Kapınızda Profesyonel Araç Temizliği</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+/* DERİNLİK (ZOOM) EFEKTİ */
+@keyframes zoomEffect {
+0% { transform: scale(1); }
+100% { transform: scale(1.15); }
+}
+
+body { transition: background-color 0.5s; scroll-behavior: smooth; }
+
+/* Karanlık Mod Ayarları */
+.dark-mode { background-color: #0f172a !important; color: #f1f5f9 !important; }
+.dark-mode .bg-white { background-color: #1e293b !important; color: white !important; }
+
+/* Arka Plan Slider Hareketleri */
+.slider-bg {
+position: absolute; inset: 0;
+background-size: cover; background-position: center;
+transition: opacity 1.5s ease-in-out;
+animation: zoomEffect 10s infinite alternate ease-in-out;
+opacity: 0;
+}
+.slider-bg.active { opacity: 1; }
+
+/* Kartların Üzerine Gelince Yükselme Efekti */
+.card:hover { transform: translateY(-10px); transition: 0.3s; }
+
+/* Bildirim Animasyonu */
+@keyframes slideIn {
+from { transform: translateX(-110%); }
+to { transform: translateX(0); }
+}
+.notification-anim { animation: slideIn 0.5s ease-out; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<div class="bg-blue-600 text-white text-center py-2 text-xs md:text-sm font-bold sticky top-0 z-[60] shadow-lg">
+<i class="fas fa-clock mr-2"></i>
+Bölge:
+<select id="ilceSec" class="bg-blue-700 border-none rounded px-1 outline-none cursor-pointer font-bold">
+<option value="40">Beşiktaş</option>
+<option value="35">Üsküdar</option>
+<option value="55">Beylikdüzü</option>
+<option value="30">Kadıköy</option>
+<option value="50">Sarıyer</option>
+</select>
+| Tahmini Varış: <span id="varisSuresi" class="underline font-black">40</span> dk!
+</div>
+
+<nav class="bg-white/90 backdrop-blur-md shadow-md p-4 sticky top-[32px] md:top-[36px] z-50">
+<div class="max-w-6xl mx-auto flex justify-between items-center">
+<div class="flex items-center space-x-2">
+<i class="fas fa-car-on text-blue-600 text-3xl"></i>
+<span class="font-black text-2xl tracking-tighter uppercase text-blue-900">Mobil Wash</span>
+</div>
+<div class="flex items-center space-x-3">
+<button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition">
+<i id="darkIcon" class="fas fa-moon text-gray-600"></i>
+</button>
+<a href="tel:05307366945" class="bg-blue-600 text-white px-5 py-2.5 rounded-2xl font-black text-sm flex items-center shadow-lg hover:bg-blue-700 transition">
+<i class="fas fa-phone mr-2"></i> 0530 736 69 45
+</a>
+</div>
+</div>
+</nav>
+
+<header class="h-[650px] md:h-[600px] relative overflow-hidden flex items-center justify-center">
+<div id="bg-1" class="slider-bg active" style="background-image: url('https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=1200');"></div>
+<div id="bg-2" class="slider-bg" style="background-image: url('https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=1200');"></div>
+<div class="absolute inset-0 bg-black/60 z-10"></div>
+
+<div class="relative z-20 w-full max-w-6xl px-4 grid md:grid-cols-2 gap-12 items-center">
+<div class="text-left text-white">
+<span class="bg-blue-600 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6 inline-block shadow-xl">7/24 Kapıda Hizmet</span>
+<h1 class="text-6xl md:text-8xl font-black mb-6 italic uppercase tracking-tighter leading-none">
+Arabanız <br><span class="text-blue-400">Parlasın</span>
+</h1>
+<p class="text-xl md:text-2xl opacity-90 font-light max-w-md leading-relaxed">
+Profesyonel ekipmanlarla olduğunuz her yerde aracınızı tertemiz yapıyoruz.
+</p>
+</div>
+
+<div class="bg-white dark:bg-slate-800 p-8 rounded-[3rem] shadow-2xl text-gray-800 border-t-[10px] border-blue-600">
+<h3 class="font-black text-3xl mb-2 text-center dark:text-white uppercase italic tracking-tighter">Hızlı Randevu</h3>
+<p class="text-center text-gray-500 text-sm mb-8 font-medium">Formu doldurun, 5 dk içinde dönüş yapalım.</p>
+<div class="space-y-4">
+<div class="relative">
+<i class="fas fa-user absolute left-5 top-5 text-gray-400"></i>
+<input type="text" id="f_ad" placeholder="Adınız Soyadınız" class="w-full pl-14 p-5 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-blue-100 outline-none transition font-semibold">
+</div>
+<div class="relative">
+<i class="fas fa-phone absolute left-5 top-5 text-gray-400"></i>
+<input type="text" id="f_tel" placeholder="Telefon Numaranız" class="w-full pl-14 p-5 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-blue-100 outline-none transition font-semibold">
+</div>
+<div class="relative">
+<i class="fas fa-car absolute left-5 top-5 text-gray-400"></i>
+<select id="f_arac" class="w-full pl-14 p-5 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-blue-100 outline-none transition appearance-none text-gray-500 font-semibold">
+<option value="Binek Araç">Binek Araç</option>
+<option value="SUV / Jip">SUV / Jip</option>
+<option value="Ticari">Ticari Araç</option>
+</select>
+</div>
+<button onclick="formWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white py-5 rounded-2xl font-black text-xl transition-all shadow-xl flex items-center justify-center transform active:scale-95">
+<i class="fab fa-whatsapp mr-3 text-3xl"></i> WHATSAPP İLE GÖNDER
+</button>
+</div>
+</div>
+</div>
+</header>
+
+<section id="fiyatlar" class="max-w-6xl mx-auto px-4 py-24">
+<div class="text-center mb-16">
+<h2 class="text-5xl font-black uppercase italic tracking-tighter dark:text-white">Hizmet Paketleri</h2>
+<div class="w-24 h-2.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+</div>
+
+<div class="grid md:grid-cols-3 gap-10">
+<div class="card bg-white p-10 rounded-[3rem] shadow-xl text-center border-b-8 border-blue-400">
+<h3 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-4">Temel Bakım</h3>
+<div class="text-6xl font-black text-blue-900 mb-10 tracking-tighter">₺650</div>
+<button onclick="whatsappMesaj('Eko Paket')" class="w-full py-5 bg-gray-100 rounded-2xl font-black text-blue-900 hover:bg-blue-600 hover:text-white transition uppercase tracking-widest shadow-sm">Seç</button>
+</div>
+
+<div class="card bg-white p-10 rounded-[3rem] shadow-2xl text-center border-b-8 border-blue-600 scale-110 relative z-10">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-2.5 rounded-full text-xs font-black tracking-widest shadow-xl">EN POPÜLER</div>
+<h3 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-4">Detaylı Hijyen</h3>
+<div class="text-6xl font-black text-blue-900 mb-10 tracking-tighter">₺1.100</div>
+<button onclick="whatsappMesaj('Standart Paket')" class="w-full py-6 bg-blue-600 text-white rounded-2xl font-black text-lg shadow-2xl hover:bg-blue-700 transition uppercase tracking-widest">Hemen Al</button>
+</div>
+
+<div class="card bg-white p-10 rounded-[3rem] shadow-xl text-center border-b-8 border-indigo-600">
+<h3 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-4">Premium Showroom</h3>
+<div class="text-6xl font-black text-blue-900 mb-10 tracking-tighter">₺2.400</div>
+<button onclick="whatsappMesaj('VIP Paket')" class="w-full py-5 bg-indigo-50 text-indigo-600 rounded-2xl font-black hover:bg-indigo-600 hover:text-white transition uppercase tracking-widest shadow-sm">Seç</button>
+</div>
+</div>
+</section>
+
+<div id="bildirim" class="fixed left-6 bottom-24 z-[100] hidden">
+<div class="notification-anim bg-white dark:bg-slate-800 shadow-2xl rounded-2xl p-5 border-l-8 border-green-500 flex items-center space-x-4">
+<div class="bg-green-100 p-2 rounded-full">
+<i class="fas fa-check text-green-600"></i>
+</div>
+<div>
+<p id="bildirimMetin" class="font-black text-gray-800 dark:text-white text-sm"></p>
+<p class="text-gray-400 text-[10px] uppercase font-bold tracking-widest">Az önce hizmet tamamlandı</p>
+</div>
+</div>
+</div>
+
+<a href="https://wa.me/905307366945" target="_blank" class="fixed bottom-8 right-8 bg-green-500 text-white p-5 rounded-full shadow-2xl z-[100] hover:scale-110 transition-all active:scale-90 flex items-center group">
+<span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 whitespace-nowrap font-black text-sm uppercase">Hemen Yazın &nbsp;</span>
+<i class="fab fa-whatsapp text-4xl"></i>
+</a>
+
+<script>
+// 7.1. Slider Mekanizması (Resim ve Derinlik Değişimi)
+let currentBg = 1;
+setInterval(() => {
+document.getElementById(`bg-${currentBg}`).classList.remove('active');
+currentBg = currentBg === 1 ? 2 : 1;
+document.getElementById(`bg-${currentBg}`).classList.add('active');
+}, 5000);
+
+// 7.2. Bölgesel Varış Süresi Güncelleme
+document.getElementById('ilceSec').addEventListener('change', function() {
+document.getElementById('varisSuresi').innerText = this.value;
+});
+
+// 7.3. Hızlı Randevu Formu Entegrasyonu
+function formWhatsApp() {
+const ad = document.getElementById('f_ad').value;
+const tel = document.getElementById('f_tel').value;
+const arac = document.getElementById('f_arac').value;
+const ilce = document.getElementById('ilceSec').selectedOptions[0].text;
+
+if(!ad || !tel) {
+alert("Lütfen size ulaşabilmemiz için isim ve telefon bilgilerinizi giriniz.");
+return;
+}
+
+const mesaj = `*YENİ RANDEVU TALEBİ*%0A---------------------------%0A👤 *Müşteri:* ${ad}%0A📞 *Telefon:* ${tel}%0A📍 *Bölge:* ${ilce}%0A🚗 *Araç Tipi:* ${arac}%0A---------------------------%0A_Acil dönüş bekliyorum._`;
+window.open(`https://wa.me/905307366945?text=${mesaj}`);
+}
+
+// 7.4. Paket Seçim Butonları
+function whatsappMesaj(paketAdi) {
+const ilce = document.getElementById('ilceSec').selectedOptions[0].text;
+const mesaj = `Merhaba, *${paketAdi}* randevusu almak istiyorum. Konumum: *${ilce}*`;
+window.open(`https://wa.me/905307366945?text=${mesaj}`);
+}
+
+// 7.5. Canlı Sosyal Kanıt Bildirimleri (Otomatik)
+const yerler = ["Beşiktaş", "Kadıköy", "Etiler", "Üsküdar", "Sarıyer", "Florya"];
+const arabalar = ["Mercedes", "BMW", "Audi", "Tesla", "Volkswagen", "Range Rover"];
+setInterval(() => {
+const b = document.getElementById('bildirim');
+const m = document.getElementById('bildirimMetin');
+const randomYer = yerler[Math.floor(Math.random()*yerler.length)];
+const randomArac = arabalar[Math.floor(Math.random()*arabalar.length)];
+
+m.innerText = `${randomYer} bölgesinde bir ${randomArac} yıkandı!`;
+b.classList.remove('hidden');
+setTimeout(() => b.classList.add('hidden'), 5000);
+}, 15000); // Her 15 saniyede bir bildirim çıkar
+
+// 7.6. Karanlık Mod Geçişi
+function toggleDarkMode() {
+document.body.classList.toggle('dark-mode');
+const icon = document.getElementById('darkIcon');
+if(document.body.classList.contains('dark-mode')) {
+icon.classList.replace('fa-moon', 'fa-sun');
+} else {
+icon.classList.replace('fa-sun', 'fa-moon');
+}
+}
+</script>
+</body>
+</html>
+
+
