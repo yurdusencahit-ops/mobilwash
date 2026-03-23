@@ -3,228 +3,193 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mobil Wash 2026 | Kapınızda Profesyonel Araç Temizliği</title>
+<title>Moto Wash Mobil | Ocean VIP Edition</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 <style>
-/* DERİNLİK (ZOOM) EFEKTİ */
-@keyframes zoomEffect {
-0% { transform: scale(1); }
-100% { transform: scale(1.15); }
+:root { --ocean-blue: #003366; --electric-blue: #0077ff; --platin: #e0e0e0; --premium-black: #050505; }
+body { background: linear-gradient(135deg, #0a0a0a 0%, #001f3f 100%); font-family: 'Georgia', serif; overflow-x: hidden; color: white; }
+
+/* PÜRÜZSÜZ SLIDER */
+.slider-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; }
+.slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 3s ease-in-out; background-size: cover; background-position: center; }
+.slide.active { opacity: 0.45; }
+
+.platin-text { background: linear-gradient(to right, #ffffff 0%, #a0a0a0 50%, #ffffff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.ocean-border { border: 2px solid transparent; border-image: linear-gradient(to right, var(--electric-blue), #00c3ff, var(--electric-blue)); border-image-slice: 1; }
+.ocean-button { background: linear-gradient(45deg, var(--electric-blue), #00c3ff, var(--electric-blue)); color: white; font-weight: 900; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 119, 255, 0.4); }
+.header-widget { backdrop-filter: blur(15px); background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 119, 255, 0.2); }
+
+/* VIP BİLDİRİM */
+#vip-popup { position: fixed; bottom: 30px; left: 30px; background: rgba(5, 5, 5, 0.95); border: 1px solid var(--electric-blue); padding: 12px 20px; border-radius: 15px; z-index: 1000; display: flex; align-items: center; gap: 10px; transform: translateX(-150%); transition: transform 0.6s ease; backdrop-filter: blur(10px); }
+#vip-popup.active { transform: translateX(0); }
+
+/* ASİSTAN BUTONU VE ANİMASYONU */
+@keyframes assistant-glow {
+0% { box-shadow: 0 0 0 0 rgba(0, 119, 255, 0.7); }
+70% { box-shadow: 0 0 0 15px rgba(0, 119, 255, 0); }
+100% { box-shadow: 0 0 0 0 rgba(0, 119, 255, 0); }
 }
-
-body { transition: background-color 0.5s; scroll-behavior: smooth; }
-
-/* Karanlık Mod Ayarları */
-.dark-mode { background-color: #0f172a !important; color: #f1f5f9 !important; }
-.dark-mode .bg-white { background-color: #1e293b !important; color: white !important; }
-
-/* Arka Plan Slider Hareketleri */
-.slider-bg {
-position: absolute; inset: 0;
-background-size: cover; background-position: center;
-transition: opacity 1.5s ease-in-out;
-animation: zoomEffect 10s infinite alternate ease-in-out;
-opacity: 0;
-}
-.slider-bg.active { opacity: 1; }
-
-/* Kartların Üzerine Gelince Yükselme Efekti */
-.card:hover { transform: translateY(-10px); transition: 0.3s; }
-
-/* Bildirim Animasyonu */
-@keyframes slideIn {
-from { transform: translateX(-110%); }
-to { transform: translateX(0); }
-}
-.notification-anim { animation: slideIn 0.5s ease-out; }
+.assistant-pulse { animation: assistant-glow 2s infinite; border: 3px solid #0077ff; background: #fff; cursor: pointer; transition: 0.3s; }
+.assistant-pulse:hover { transform: scale(1.1); }
 </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body>
 
-<div class="bg-blue-600 text-white text-center py-2 text-xs md:text-sm font-bold sticky top-0 z-[60] shadow-lg">
-<i class="fas fa-clock mr-2"></i>
-Bölge:
-<select id="ilceSec" class="bg-blue-700 border-none rounded px-1 outline-none cursor-pointer font-bold">
-<option value="40">Beşiktaş</option>
-<option value="35">Üsküdar</option>
-<option value="55">Beylikdüzü</option>
-<option value="30">Kadıköy</option>
-<option value="50">Sarıyer</option>
-</select>
-| Tahmini Varış: <span id="varisSuresi" class="underline font-black">40</span> dk!
+<div id="vip-popup">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<p id="vip-msg" class="text-xs font-bold platin-text uppercase tracking-tight italic"></p>
 </div>
 
-<nav class="bg-white/90 backdrop-blur-md shadow-md p-4 sticky top-[32px] md:top-[36px] z-50">
-<div class="max-w-6xl mx-auto flex justify-between items-center">
-<div class="flex items-center space-x-2">
-<i class="fas fa-car-on text-blue-600 text-3xl"></i>
-<span class="font-black text-2xl tracking-tighter uppercase text-blue-900">Mobil Wash</span>
+<header class="flex justify-between items-start p-6 md:p-10 relative z-20">
+<div class="header-widget rounded-2xl p-4 text-center w-24 border-b-4 border-[#00c3ff]">
+<div id="cal-month" class="text-[10px] font-bold text-gray-400 uppercase">MART</div>
+<div id="cal-day" class="text-3xl font-black platin-text">23</div>
 </div>
-<div class="flex items-center space-x-3">
-<button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-<i id="darkIcon" class="fas fa-moon text-gray-600"></i>
-</button>
-<a href="tel:05307366945" class="bg-blue-600 text-white px-5 py-2.5 rounded-2xl font-black text-sm flex items-center shadow-lg hover:bg-blue-700 transition">
-<i class="fas fa-phone mr-2"></i> 0530 736 69 45
-</a>
+<div class="header-widget rounded-full px-4 py-2 mt-4 flex items-center gap-3">
+<span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span></span>
+<span class="text-[10px] font-bold platin-text uppercase italic">Saha Ekibi Aktif</span>
 </div>
-</div>
-</nav>
-
-<header class="h-[650px] md:h-[600px] relative overflow-hidden flex items-center justify-center">
-<div id="bg-1" class="slider-bg active" style="background-image: url('https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=1200');"></div>
-<div id="bg-2" class="slider-bg" style="background-image: url('https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=1200');"></div>
-<div class="absolute inset-0 bg-black/60 z-10"></div>
-
-<div class="relative z-20 w-full max-w-6xl px-4 grid md:grid-cols-2 gap-12 items-center">
-<div class="text-left text-white">
-<span class="bg-blue-600 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6 inline-block shadow-xl">7/24 Kapıda Hizmet</span>
-<h1 class="text-6xl md:text-8xl font-black mb-6 italic uppercase tracking-tighter leading-none">
-Arabanız <br><span class="text-blue-400">Parlasın</span>
-</h1>
-<p class="text-xl md:text-2xl opacity-90 font-light max-w-md leading-relaxed">
-Profesyonel ekipmanlarla olduğunuz her yerde aracınızı tertemiz yapıyoruz.
-</p>
-</div>
-
-<div class="bg-white dark:bg-slate-800 p-8 rounded-[3rem] shadow-2xl text-gray-800 border-t-[10px] border-blue-600">
-<h3 class="font-black text-3xl mb-2 text-center dark:text-white uppercase italic tracking-tighter">Hızlı Randevu</h3>
-<p class="text-center text-gray-500 text-sm mb-8 font-medium">Formu doldurun, 5 dk içinde dönüş yapalım.</p>
-<div class="space-y-4">
-<div class="relative">
-<i class="fas fa-user absolute left-5 top-5 text-gray-400"></i>
-<input type="text" id="f_ad" placeholder="Adınız Soyadınız" class="w-full pl-14 p-5 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-blue-100 outline-none transition font-semibold">
-</div>
-<div class="relative">
-<i class="fas fa-phone absolute left-5 top-5 text-gray-400"></i>
-<input type="text" id="f_tel" placeholder="Telefon Numaranız" class="w-full pl-14 p-5 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-blue-100 outline-none transition font-semibold">
-</div>
-<div class="relative">
-<i class="fas fa-car absolute left-5 top-5 text-gray-400"></i>
-<select id="f_arac" class="w-full pl-14 p-5 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-blue-100 outline-none transition appearance-none text-gray-500 font-semibold">
-<option value="Binek Araç">Binek Araç</option>
-<option value="SUV / Jip">SUV / Jip</option>
-<option value="Ticari">Ticari Araç</option>
-</select>
-</div>
-<button onclick="formWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white py-5 rounded-2xl font-black text-xl transition-all shadow-xl flex items-center justify-center transform active:scale-95">
-<i class="fab fa-whatsapp mr-3 text-3xl"></i> WHATSAPP İLE GÖNDER
-</button>
-</div>
-</div>
+<div class="header-widget rounded-2xl px-6 py-4 text-right border-r-4 border-[#00c3ff]">
+<div id="digital-clock" class="text-4xl font-black platin-text tracking-tighter">00:00</div>
+<div class="text-[9px] font-bold text-gray-500 uppercase tracking-[2px]">VIP Servis</div>
 </div>
 </header>
 
-<section id="fiyatlar" class="max-w-6xl mx-auto px-4 py-24">
-<div class="text-center mb-16">
-<h2 class="text-5xl font-black uppercase italic tracking-tighter dark:text-white">Hizmet Paketleri</h2>
-<div class="w-24 h-2.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+<main class="relative h-[70vh] flex flex-col items-center justify-center text-center px-4">
+<div class="slider-container">
+<div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1500');"></div>
+<div class="slide" style="background-image: url('https://images.unsplash.com/photo-1607860108855-64acf2078ed9?q=80&w=1500');"></div>
+<div class="slide" style="background-image: url('https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1500');"></div>
 </div>
+<h1 class="text-6xl md:text-9xl font-black italic tracking-tighter uppercase platin-text">MOTO<span class="platin-text">WASH</span></h1>
+<p class="text-gray-400 tracking-[10px] uppercase text-[10px] mb-8 mt-2">Premium Mobile Detailing</p>
+<div id="gece-uyari" class="hidden bg-red-900/40 border border-red-500 text-red-200 px-6 py-2 rounded-full text-[10px] font-bold animate-pulse mb-6">🌙 GECE TARİFESİ AKTİF (%30)</div>
+<button onclick="window.open('https://wa.me/905307366945', '_blank')" class="ocean-button px-12 py-5 rounded-full text-xl flex items-center gap-4 italic font-black uppercase tracking-widest">
+<i class="fas fa-motorcycle"></i> KONUM AT GELELİM!
+</button>
+</main>
 
-<div class="grid md:grid-cols-3 gap-10">
-<div class="card bg-white p-10 rounded-[3rem] shadow-xl text-center border-b-8 border-blue-400">
-<h3 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-4">Temel Bakım</h3>
-<div class="text-6xl font-black text-blue-900 mb-10 tracking-tighter">₺650</div>
-<button onclick="whatsappMesaj('Eko Paket')" class="w-full py-5 bg-gray-100 rounded-2xl font-black text-blue-900 hover:bg-blue-600 hover:text-white transition uppercase tracking-widest shadow-sm">Seç</button>
+<section class="max-w-4xl mx-auto mb-16 px-6 relative z-30 -mt-10">
+<div class="bg-[#050505]/95 backdrop-blur-xl p-8 rounded-[2.5rem] ocean-border shadow-2xl">
+<div class="grid md:grid-cols-2 gap-8">
+<div>
+<label class="block text-[10px] text-gray-500 uppercase font-bold mb-3 tracking-widest">Hizmet Bölgesi</label>
+<select id="bolge" onchange="hesapla()" class="w-full bg-black border border-gray-800 p-4 rounded-xl text-white font-bold outline-none">
+<option value="0">Merkezi Bölgeler</option>
+<option value="350">Uzak Bölgeler (+350 TL)</option>
+</select>
 </div>
-
-<div class="card bg-white p-10 rounded-[3rem] shadow-2xl text-center border-b-8 border-blue-600 scale-110 relative z-10">
-<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-2.5 rounded-full text-xs font-black tracking-widest shadow-xl">EN POPÜLER</div>
-<h3 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-4">Detaylı Hijyen</h3>
-<div class="text-6xl font-black text-blue-900 mb-10 tracking-tighter">₺1.100</div>
-<button onclick="whatsappMesaj('Standart Paket')" class="w-full py-6 bg-blue-600 text-white rounded-2xl font-black text-lg shadow-2xl hover:bg-blue-700 transition uppercase tracking-widest">Hemen Al</button>
+<div>
+<label class="block text-[10px] text-gray-500 uppercase font-bold mb-3 tracking-widest">Araç Segmenti</label>
+<select id="arac" onchange="hesapla()" class="w-full bg-black border border-gray-800 p-4 rounded-xl text-white font-bold outline-none">
+<option value="binek">Premium Binek</option>
+<option value="suv">Luxury SUV / VIP</option>
+</select>
 </div>
-
-<div class="card bg-white p-10 rounded-[3rem] shadow-xl text-center border-b-8 border-indigo-600">
-<h3 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-4">Premium Showroom</h3>
-<div class="text-6xl font-black text-blue-900 mb-10 tracking-tighter">₺2.400</div>
-<button onclick="whatsappMesaj('VIP Paket')" class="w-full py-5 bg-indigo-50 text-indigo-600 rounded-2xl font-black hover:bg-indigo-600 hover:text-white transition uppercase tracking-widest shadow-sm">Seç</button>
 </div>
 </div>
 </section>
 
-<div id="bildirim" class="fixed left-6 bottom-24 z-[100] hidden">
-<div class="notification-anim bg-white dark:bg-slate-800 shadow-2xl rounded-2xl p-5 border-l-8 border-green-500 flex items-center space-x-4">
-<div class="bg-green-100 p-2 rounded-full">
-<i class="fas fa-check text-green-600"></i>
+<section class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 px-6 mb-24 relative z-30 text-center">
+<div class="bg-[#111]/90 p-10 rounded-[2rem] border-t-4 border-gray-800 hover:border-[#00c3ff] transition">
+<h3 class="text-xl font-bold mb-2 platin-text italic">Silver Paketi</h3>
+<div class="text-4xl font-black text-white mb-8"><span id="price-standart">950</span> TL</div>
+<button onclick="window.open('https://wa.me/905307366945', '_blank')" class="w-full py-4 rounded-xl border border-[#00c3ff] text-[#00c3ff] font-bold uppercase text-xs tracking-widest hover:bg-[#00c3ff] hover:text-white transition">Hemen Randevu</button>
 </div>
-<div>
-<p id="bildirimMetin" class="font-black text-gray-800 dark:text-white text-sm"></p>
-<p class="text-gray-400 text-[10px] uppercase font-bold tracking-widest">Az önce hizmet tamamlandı</p>
+<div class="bg-black p-10 rounded-[2.5rem] ocean-border transform scale-110 shadow-2xl">
+<div class="ocean-button text-[9px] py-1 px-4 rounded-full inline-block mb-4 text-white font-bold tracking-widest">VİTRİN PAKETİ</div>
+<h3 class="text-2xl font-bold mb-2 platin-text italic">GOLD VIP</h3>
+<div class="text-5xl font-black text-white mb-8"><span id="price-vip">1600</span> TL</div>
+<button onclick="window.open('https://wa.me/905307366945', '_blank')" class="ocean-button w-full py-4 rounded-xl font-black uppercase text-xs tracking-widest">ŞİMDİ ÇAĞIR</button>
 </div>
+<div class="bg-[#111]/90 p-10 rounded-[2rem] border-t-4 border-gray-800 hover:border-[#00c3ff] transition">
+<h3 class="text-xl font-bold mb-2 platin-text italic">Platinum</h3>
+<div class="text-4xl font-black text-white mb-8"><span id="price-ultra">2400</span> TL</div>
+<button onclick="window.open('https://wa.me/905307366945', '_blank')" class="w-full py-4 rounded-xl border border-[#00c3ff] text-[#00c3ff] font-bold uppercase text-xs tracking-widest hover:bg-[#00c3ff] hover:text-white transition">Hemen Randevu</button>
+</div>
+</section>
+
+<section class="max-w-6xl mx-auto px-6 mb-32 relative z-30">
+<div class="bg-black/80 backdrop-blur-xl p-12 rounded-[3rem] ocean-border text-center">
+<h2 class="text-4xl font-black platin-text italic uppercase mb-12">Kurumsal Prestij</h2>
+<div class="grid md:grid-cols-3 gap-10">
+<div class="border-l border-gray-800 pl-6">
+<h4 class="text-xl font-bold text-[#00c3ff] mb-4">Biz Kimiz?</h4>
+<p class="text-gray-400 text-sm">İstanbul'un en seçkin araçlarına kapıda VIP hizmet sunan mobil detaylı temizlik uzmanıyız.</p>
+</div>
+<div class="border-l border-gray-800 pl-6">
+<h4 class="text-xl font-bold text-[#00c3ff] mb-4">Misyonumuz</h4>
+<p class="text-gray-400 text-sm">En ileri teknolojiyle, zamanınızı size bırakarak aracınızı ilk günkü ihtişamına kavuşturmak.</p>
+</div>
+<div class="border-l border-gray-800 pl-6">
+<h4 class="text-xl font-bold text-[#00c3ff] mb-4">Vizyonumuz</h4>
+<p class="text-gray-400 text-sm">Türkiye'de lüks mobil detailing denince akla gelen tek marka olmak.</p>
+</div>
+</div>
+</div>
+</section>
+
+<div style="position: fixed; bottom: 25px; right: 25px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end;">
+<div id="ai-bubble" style="display: none; background: white; color: #333; padding: 12px 18px; border-radius: 15px 15px 0 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); margin-bottom: 12px; width: 200px; border: 1px solid #0077ff; font-family: sans-serif; font-size: 13px; font-weight: bold;">
+Size nasıl yardımcı olabilirim?
+</div>
+<div onclick="window.open('https://wa.me/905307366945', '_blank')" class="assistant-pulse" style="width: 75px; height: 75px; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+<svg viewBox="0 0 24 24" fill="#0077ff" style="width: 80%; height: 80%;">
+<path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+<path d="M18 11c.55 0 1-.45 1-1V8c0-.55-.45-1-1-1s-1 .45-1 1v2c0 .55.45 1 1 1zM6 11c.55 0 1-.45 1-1V8c0-.55-.45-1-1-1s-1 .45-1 1v2c0 .55.45 1 1 1z" opacity=".3"/>
+<path d="M19 14c1.66 0 3-1.34 3-3V9c0-3.87-3.13-7-7-7h-6C5.13 2 2 5.13 2 9v2c0 1.66 1.34 3 3 3h1v2c0 1.1.9 2 2 2h2c.18 0 .35-.02.51-.06.41.64 1.13 1.06 1.95 1.06s1.54-.42 1.95-1.06c.16.04.33.06.51.06h2c1.1 0 2-.9 2-2v-2h1z" fill="none" stroke="#0077ff" stroke-width="0.5"/>
+</svg>
 </div>
 </div>
 
-<a href="https://wa.me/905307366945" target="_blank" class="fixed bottom-8 right-8 bg-green-500 text-white p-5 rounded-full shadow-2xl z-[100] hover:scale-110 transition-all active:scale-90 flex items-center group">
-<span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 whitespace-nowrap font-black text-sm uppercase">Hemen Yazın &nbsp;</span>
-<i class="fab fa-whatsapp text-4xl"></i>
-</a>
+<footer class="bg-black py-16 text-center border-t border-gray-900 relative z-30">
+<p class="text-[10px] tracking-[5px] text-gray-700 font-bold uppercase italic">© 2026 MOTO WASH MOBIL | 0530 736 69 45</p>
+</footer>
 
 <script>
-// 7.1. Slider Mekanizması (Resim ve Derinlik Değişimi)
-let currentBg = 1;
-setInterval(() => {
-document.getElementById(`bg-${currentBg}`).classList.remove('active');
-currentBg = currentBg === 1 ? 2 : 1;
-document.getElementById(`bg-${currentBg}`).classList.add('active');
-}, 5000);
+function updateClock() {
+const now = new Date();
+document.getElementById('digital-clock').innerText = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
+const months = ["OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN", "TEMMUZ", "AĞUSTOS", "EYLÜL", "EKİM", "KASIM", "ARALIK"];
+document.getElementById('cal-month').innerText = months[now.getMonth()];
+document.getElementById('cal-day').innerText = now.getDate();
+}
+setInterval(updateClock, 1000); updateClock();
 
-// 7.2. Bölgesel Varış Süresi Güncelleme
-document.getElementById('ilceSec').addEventListener('change', function() {
-document.getElementById('varisSuresi').innerText = this.value;
-});
+let sIdx = 0;
+const slides = document.querySelectorAll('.slide');
+function nextSlide() {
+slides[sIdx].classList.remove('active');
+sIdx = (sIdx + 1) % slides.length;
+slides[sIdx].classList.add('active');
+}
+setInterval(nextSlide, 5000);
 
-// 7.3. Hızlı Randevu Formu Entegrasyonu
-function formWhatsApp() {
-const ad = document.getElementById('f_ad').value;
-const tel = document.getElementById('f_tel').value;
-const arac = document.getElementById('f_arac').value;
-const ilce = document.getElementById('ilceSec').selectedOptions[0].text;
-
-if(!ad || !tel) {
-alert("Lütfen size ulaşabilmemiz için isim ve telefon bilgilerinizi giriniz.");
-return;
+const prices = { binek: { s: 950, v: 1600, u: 2400 }, suv: { s: 1250, v: 1950, u: 2900 } };
+function hesapla() {
+const a = document.getElementById('arac').value;
+const b = parseInt(document.getElementById('bolge').value);
+const h = new Date().getHours();
+let m = (h >= 21 || h < 7) ? 1.3 : 1;
+h >= 21 || h < 7 ? document.getElementById('gece-uyari').classList.remove('hidden') : document.getElementById('gece-uyari').classList.add('hidden');
+document.getElementById('price-standart').innerText = Math.round(prices[a].s * m + b);
+document.getElementById('price-vip').innerText = Math.round(prices[a].v * m + b);
+document.getElementById('price-ultra').innerText = Math.round(prices[a].u * m + b);
 }
 
-const mesaj = `*YENİ RANDEVU TALEBİ*%0A---------------------------%0A👤 *Müşteri:* ${ad}%0A📞 *Telefon:* ${tel}%0A📍 *Bölge:* ${ilce}%0A🚗 *Araç Tipi:* ${arac}%0A---------------------------%0A_Acil dönüş bekliyorum._`;
-window.open(`https://wa.me/905307366945?text=${mesaj}`);
+const notifications = ["Beşiktaş'ta VIP temizlik bitti", "Nişantaşı'nda BMW teslim edildi", "Porsche Taycan parlatıldı", "Etiler'de servis tamamlandı"];
+function showPopup() {
+const popup = document.getElementById('vip-popup');
+const msg = document.getElementById('vip-msg');
+msg.innerText = notifications[Math.floor(Math.random() * notifications.length)];
+popup.classList.add('active');
+setTimeout(() => popup.classList.remove('active'), 5000);
 }
-
-// 7.4. Paket Seçim Butonları
-function whatsappMesaj(paketAdi) {
-const ilce = document.getElementById('ilceSec').selectedOptions[0].text;
-const mesaj = `Merhaba, *${paketAdi}* randevusu almak istiyorum. Konumum: *${ilce}*`;
-window.open(`https://wa.me/905307366945?text=${mesaj}`);
-}
-
-// 7.5. Canlı Sosyal Kanıt Bildirimleri (Otomatik)
-const yerler = ["Beşiktaş", "Kadıköy", "Etiler", "Üsküdar", "Sarıyer", "Florya"];
-const arabalar = ["Mercedes", "BMW", "Audi", "Tesla", "Volkswagen", "Range Rover"];
-setInterval(() => {
-const b = document.getElementById('bildirim');
-const m = document.getElementById('bildirimMetin');
-const randomYer = yerler[Math.floor(Math.random()*yerler.length)];
-const randomArac = arabalar[Math.floor(Math.random()*arabalar.length)];
-
-m.innerText = `${randomYer} bölgesinde bir ${randomArac} yıkandı!`;
-b.classList.remove('hidden');
-setTimeout(() => b.classList.add('hidden'), 5000);
-}, 15000); // Her 15 saniyede bir bildirim çıkar
-
-// 7.6. Karanlık Mod Geçişi
-function toggleDarkMode() {
-document.body.classList.toggle('dark-mode');
-const icon = document.getElementById('darkIcon');
-if(document.body.classList.contains('dark-mode')) {
-icon.classList.replace('fa-moon', 'fa-sun');
-} else {
-icon.classList.replace('fa-sun', 'fa-moon');
-}
-}
+setInterval(showPopup, 15000); setTimeout(showPopup, 3000);
+setTimeout(() => { document.getElementById('ai-bubble').style.display = 'block'; }, 4000);
+hesapla();
 </script>
 </body>
 </html>
-
 
